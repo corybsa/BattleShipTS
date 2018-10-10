@@ -28,7 +28,7 @@
 
   <table #aiBoard id="ai-board">
     <tr *ngFor="let row of boardRows">
-      <td *ngFor="let col of boardRows" (mouseenter)="highlight(row, col)" (mouseleave)="unhighlight(row, col)">&nbsp;</td>
+      <td *ngFor="let col of boardRows" (mouseenter)="highlight(row, col)" (mouseleave)="unhighlight(row, col)" (click)="checkCell(row, col)">&nbsp;</td>
     </tr>
   </table>
   <div id="ai-output"></div>

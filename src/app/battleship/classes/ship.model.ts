@@ -6,5 +6,23 @@ export class Ship {
   private name: string;
   private orientation: Orientation;
 
-  constructor() {}
+  constructor(size: number, name: string) {
+    this.size = size;
+    this.health = size;
+    this.name = name;
+  }
+
+  public takeDamage() {
+    if(this.health > 0) {
+      this.health -= 1;
+    }
+  }
+
+  public isDestroyed() {
+    return this.health === 0;
+  }
+
+  public attack() {
+
+  }
 }

@@ -1,4 +1,5 @@
-import {AfterContentInit, Component, ContentChild, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {AfterContentInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {Ship} from './classes/ship.model';
 
 @Component({
   selector: 'castle-battleship',
@@ -8,6 +9,8 @@ import {AfterContentInit, Component, ContentChild, ElementRef, OnInit, Renderer2
 export class BattleshipComponent implements AfterContentInit {
   dimensions = 10;
   boardRows = [];
+  playerShips: Ship[] = [];
+  aiShips: Ship[] = [];
 
   @ViewChild('aiBoard') aiBoard: ElementRef;
   @ViewChild('playerBoard') playerBoard: ElementRef;
@@ -16,6 +19,22 @@ export class BattleshipComponent implements AfterContentInit {
 
   constructor() {
     this.boardRows = Array(this.dimensions).fill(0).map((x, i) => i);
+
+    this.playerShips.push(
+      new Ship(2, 'patrol-boat'),
+      new Ship(3, 'destroyer'),
+      new Ship(4, 'submarine'),
+      new Ship(4, 'battleship'),
+      new Ship(5, 'aircraft-carrier')
+    );
+
+    this.aiShips.push(
+      new Ship(2, 'patrol-boat'),
+      new Ship(3, 'destroyer'),
+      new Ship(4, 'submarine'),
+      new Ship(4, 'battleship'),
+      new Ship(5, 'aircraft-carrier')
+    );
   }
 
   ngAfterContentInit() {
@@ -30,5 +49,17 @@ export class BattleshipComponent implements AfterContentInit {
   unhighlight(row, col) {
     this.aiSideCoordinates.nativeElement.childNodes[row].classList.remove('highlight');
     this.aiTopCoordinates.nativeElement.childNodes[col].classList.remove('highlight');
+  }
+
+  checkCell(row, col) {
+
+  }
+
+  placeShips() {
+
+  }
+
+  checkBoundaries(row, col) {
+
   }
 }
