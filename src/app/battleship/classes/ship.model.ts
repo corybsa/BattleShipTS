@@ -1,4 +1,5 @@
 import {Orientation} from './orientation.model';
+import {ShipType} from './ship-types.model';
 
 export class Ship {
   private size: number;
@@ -6,10 +7,10 @@ export class Ship {
   private name: string;
   private orientation: Orientation;
 
-  constructor(size: number, name: string) {
-    this.size = size;
-    this.health = size;
-    this.name = name;
+  constructor(ship: ShipType) {
+    this.size = ship.size;
+    this.health = ship.size;
+    this.name = ship.name;
   }
 
   public takeDamage() {

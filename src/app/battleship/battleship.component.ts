@@ -1,5 +1,6 @@
 import {AfterContentInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {Ship} from './classes/ship.model';
+import {ShipTypes} from './classes/ship-types.model';
 
 @Component({
   selector: 'castle-battleship',
@@ -21,19 +22,19 @@ export class BattleshipComponent implements AfterContentInit {
     this.boardRows = Array(this.dimensions).fill(0).map((x, i) => i);
 
     this.playerShips.push(
-      new Ship(2, 'patrol-boat'),
-      new Ship(3, 'destroyer'),
-      new Ship(4, 'submarine'),
-      new Ship(4, 'battleship'),
-      new Ship(5, 'aircraft-carrier')
+      new Ship(ShipTypes.PATROL_BOAT),
+      new Ship(ShipTypes.DESTROYER),
+      new Ship(ShipTypes.SUBMARINE),
+      new Ship(ShipTypes.BATTLESHIP),
+      new Ship(ShipTypes.AIRCRAFT_CARRER)
     );
 
     this.aiShips.push(
-      new Ship(2, 'patrol-boat'),
-      new Ship(3, 'destroyer'),
-      new Ship(4, 'submarine'),
-      new Ship(4, 'battleship'),
-      new Ship(5, 'aircraft-carrier')
+      new Ship(ShipTypes.PATROL_BOAT),
+      new Ship(ShipTypes.DESTROYER),
+      new Ship(ShipTypes.SUBMARINE),
+      new Ship(ShipTypes.BATTLESHIP),
+      new Ship(ShipTypes.AIRCRAFT_CARRER)
     );
   }
 
