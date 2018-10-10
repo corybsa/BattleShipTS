@@ -2,6 +2,18 @@
   text-align: center;
 }
 
+::ng-deep .highlight {
+  background-color: #FFF9C4;
+}
+
+::ng-deep .hit {
+  background-color: #F44336;
+}
+
+::ng-deep .miss {
+  background-color: #4CAF50;
+}
+
 ::ng-deep #player-output {
   float: right;
 }
@@ -17,7 +29,7 @@
 }
 
 ::ng-deep #ai-board {
-  cursor: default !important;
+  cursor: crosshair !important;
 }
 
 ::ng-deep #ai-board,

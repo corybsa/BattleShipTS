@@ -1,6 +1,6 @@
 <div id="ai">
   <h3 class="center">AI's board</h3>
-  <ul id="ai-side-coordinates">
+  <ul #aiSideCoordinates id="ai-side-coordinates">
     <li>0</li>
     <li>1</li>
     <li>2</li>
@@ -13,7 +13,7 @@
     <li>9</li>
   </ul>
 
-  <ul id="ai-top-coordinates">
+  <ul #aiTopCoordinates id="ai-top-coordinates">
     <li>0</li>
     <li>1</li>
     <li>2</li>
@@ -28,7 +28,7 @@
 
   <table #aiBoard id="ai-board">
     <tr *ngFor="let row of boardRows">
-      <td *ngFor="let col of boardRows">&nbsp;</td>
+      <td *ngFor="let col of boardRows" (mouseenter)="highlight(row, col)" (mouseleave)="unhighlight(row, col)">&nbsp;</td>
     </tr>
   </table>
   <div id="ai-output"></div>
