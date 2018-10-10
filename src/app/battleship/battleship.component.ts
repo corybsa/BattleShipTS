@@ -7,12 +7,13 @@ import {AfterContentInit, Component, OnInit, ViewChild} from '@angular/core';
 })
 export class BattleshipComponent implements AfterContentInit {
   dimensions = 10;
+  boardRows = [];
 
   @ViewChild('aiBoard') aiBoard: HTMLTableElement;
   @ViewChild('playerBoard') playerBoard: HTMLTableElement;
 
   constructor() {
-
+    this.boardRows = Array(this.dimensions).fill(0).map((x, i) => i);
   }
 
   ngAfterContentInit() {
