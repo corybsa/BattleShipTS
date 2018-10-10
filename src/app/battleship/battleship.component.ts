@@ -19,7 +19,7 @@ export class BattleshipComponent implements AfterContentInit {
   @ViewChild('aiTopCoordinates') aiTopCoordinates: ElementRef;
 
   constructor() {
-    this.boardRows = Array(this.dimensions).fill(0).map((x, i) => i);
+    this.boardRows = Array(this.dimensions).map((x, i) => i);
 
     this.playerShips.push(
       new Ship(ShipTypes.PATROL_BOAT),
