@@ -64,7 +64,11 @@
     <li>9</li>
   </ul>
 
-  <table #playerBoard id="player-board"></table>
+  <table #playerBoard id="player-board">
+    <tr *ngFor="let row of boardRows">
+      <td *ngFor="let col of boardRows">&nbsp;</td>
+    </tr>
+  </table>
   <div id="player-output"></div>
 </div>
 <br />

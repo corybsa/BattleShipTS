@@ -8,6 +8,7 @@
 
 ::ng-deep #player, ::ng-deep #ai {
   float: left;
+  position: relative;
 }
 
 ::ng-deep #space {
@@ -19,9 +20,21 @@
   cursor: default !important;
 }
 
-::ng-deep #ai-board td {
-  border: 1px solid hsl(0, 0%, 60%);
+::ng-deep #ai-board,
+::ng-deep #player-board {
+  border-collapse: collapse;
+  position: absolute;
+  top: 98px;
+  left: 37px;
+}
 
+::ng-deep #ai-board td,
+::ng-deep #player-board td {
+  border: 1px solid hsl(0, 0%, 60%);
+  height: 35px;
+  width: 35px;
+  padding: 0;
+  margin: 0;
 }
 
 ::ng-deep #ai-side-coordinates,
