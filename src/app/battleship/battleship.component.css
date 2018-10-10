@@ -1,0 +1,118 @@
+/*::ng-deep body {
+    font-family: sans-serif;
+    font-size: 12pt;
+}
+
+::ng-deep h3 {
+    display: block;
+}*/
+
+::ng-deep #player {
+    width: 366px;
+    float: left;
+}
+
+::ng-deep #space {
+    width: 50px;
+    float: left;
+}
+
+::ng-deep #ai {
+    width: 366px;
+    float: left;
+}
+
+::ng-deep #ai-board {
+    cursor: default !important;
+}
+
+::ng-deep #ai-board, ::ng-deep #player-board {
+    cursor: crosshair;
+    border-collapse: collapse;
+    background-image: url("./images/water.png");
+    background-position: -100px -100px;
+    color: white;
+    float: left;
+}
+
+::ng-deep #ai-board td, ::ng-deep #player-board td {
+    border: 1px solid white;
+    border-collapse: collapse;
+    width: 30px;
+    height: 30px;
+}
+
+::ng-deep #ai-top-coordinates td, ::ng-deep #player-top-coordinates td {
+    cursor: default;
+    font-weight: bold;
+    text-align: center;
+    color: black;
+    width: 30px;
+    height: 28px;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+::ng-deep #ai-top-coordinates tr, ::ng-deep #player-top-coordinates tr {
+    background-color: rgba(200, 200, 200, 0.8);
+}
+
+::ng-deep #ai-side-coordinates td, ::ng-deep #player-side-coordinates td{
+    cursor: default;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 3px;
+    color: black;
+    background-color: rgba(200, 200, 200, 0.8);
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 30px;
+    height: 30px;
+}
+
+::ng-deep #ai-side-coordinates th, ::ng-deep #player-side-coordinates th {
+    height: 30px;
+}
+
+::ng-deep #ai-side-coordinates, ::ng-deep #player-side-coordinates {
+    float: left;
+}
+
+::ng-deep .highlight {
+    background-color: rgba(255, 255, 0, 0.4);
+}
+
+::ng-deep .miss {
+    background-color: rgba(255, 0, 0, 0.4);
+}
+
+::ng-deep .hit {
+    background-color: rgba(0, 255, 0, 0.4);
+}
+
+::ng-deep .target {
+    background-color: rgba(100, 100, 100, 0.8);
+}
+
+::ng-deep .side {
+    background-color: rgba(255, 0, 0, 1);
+}
+
+::ng-deep .top {
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
+::ng-deep .center {
+    text-align: center;
+}
+
+::ng-deep .bottom {
+    float: left;
+    clear: both;
+}
+
+::ng-deep #ai-output, ::ng-deep #player-output {
+    color: red;
+    text-align: right;
+    clear: both;
+}
