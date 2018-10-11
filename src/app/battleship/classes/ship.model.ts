@@ -64,7 +64,14 @@ export class Ship {
     return this.health === 0;
   }
 
-  public attack() {
+  public toJson(): string {
+    const payload = {
+      size: this.size,
+      health: this.health,
+      name: this.name,
+      orientation: this.orientation
+    };
 
+    return JSON.stringify(payload);
   }
 }

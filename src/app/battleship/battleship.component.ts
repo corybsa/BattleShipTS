@@ -97,7 +97,7 @@ export class BattleshipComponent implements AfterViewInit {
     }
 
     for(let i = 0; i < ship.size; i++) {
-      board.nativeElement.children[0].children[row].children[col].setAttribute('ship', JSON.stringify(ship));
+      board.nativeElement.children[0].children[row].children[col].setAttribute('ship', ship.toJson());
       board.nativeElement.children[0].children[row].children[col].classList.add('hint');
 
       switch(ship.orientation) {
@@ -195,7 +195,17 @@ export class BattleshipComponent implements AfterViewInit {
         this.aiOutput.nativeElement.innerText = `You hit the enemy's ${ship.name}!`;
         this.aiScore += 1;
       }
+    } else {
+      if(attackingPlayerType === PlayerType.PLAYER) {
+        this.playerOutput.nativeElement.innerText = `You destroyed the enemy's ${ship.name}!`;
+        this.playerScore += 2;
+      } else {
+        this.aiOutput.nativeElement.innerText = `You destroyed the enemy's ${ship.name}!`;
+        this.aiScore += 2;
+      }
     }
+
+    // TODO: update the cell with hit information
   }
 
   shipMissed(attackingPlayerType: PlayerType) {
@@ -206,6 +216,8 @@ export class BattleshipComponent implements AfterViewInit {
       this.aiOutput.nativeElement.innerText = 'You missed!';
       this.aiMisses += 1;
     }
+
+    // TODO: update the cell with miss information
   }
 
   buildShip(ship: Ship): Ship {
