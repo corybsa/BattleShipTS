@@ -165,6 +165,7 @@ export class BattleshipComponent implements AfterViewInit {
     return true;
   }
 
+  // TODO: Add documentation
   checkCell(row: number, col: number, attackingPlayerType: PlayerType) {
     let board: ElementRef;
 
@@ -178,13 +179,14 @@ export class BattleshipComponent implements AfterViewInit {
 
     if(cell.hasAttribute('ship')) {
       const ship: Ship = this.buildShip(JSON.parse(cell.getAttribute('ship')));
-      this.shipHit(ship, attackingPlayerType);
+      this.shipHit(ship, row, col, attackingPlayerType);
     } else {
-      this.shipMissed(attackingPlayerType);
+      this.shipMissed(row, col, attackingPlayerType);
     }
   }
 
-  shipHit(ship: Ship, attackingPlayerType: PlayerType) {
+  // TODO: Add documentation
+  shipHit(ship: Ship, row: number, col: number, attackingPlayerType: PlayerType) {
     if(!ship.isDestroyed()) {
       ship.takeDamage();
 
@@ -208,7 +210,8 @@ export class BattleshipComponent implements AfterViewInit {
     // TODO: update the cell with hit information
   }
 
-  shipMissed(attackingPlayerType: PlayerType) {
+  // TODO: Add documentation
+  shipMissed(row: number, col: number, attackingPlayerType: PlayerType) {
     if(attackingPlayerType === PlayerType.PLAYER) {
       this.playerOutput.nativeElement.innerText = 'You missed!';
       this.playerMisses += 1;
