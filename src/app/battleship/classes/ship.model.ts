@@ -47,7 +47,7 @@ export class Ship {
   }
 
   public get orientation() {
-    return this.orientation;
+    return this.mOrientation;
   }
 
   public set orientation(value) {
