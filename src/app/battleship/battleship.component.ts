@@ -10,15 +10,25 @@ import {Orientation} from './classes/orientation.model';
   templateUrl: './battleship.component.html'
 })
 export class BattleshipComponent implements AfterViewInit {
+  playerType = PlayerType;
   dimensions = 10;
   boardRows = [];
+
   playerShips: Ship[] = [];
+  playerScore = 0;
+  playerMisses = 0;
+
   aiShips: Ship[] = [];
+  aiScore = 0;
+  aiMisses = 0;
+
 
   @ViewChild('aiBoard') aiBoard: ElementRef;
   @ViewChild('playerBoard') playerBoard: ElementRef;
   @ViewChild('aiSideCoordinates') aiSideCoordinates: ElementRef;
   @ViewChild('aiTopCoordinates') aiTopCoordinates: ElementRef;
+  @ViewChild('aiOutput') aiOutput: ElementRef;
+  @ViewChild('playerOutput') playerOutput: ElementRef;
 
   constructor() {
     this.boardRows = Array(this.dimensions).fill(0).map((x, i) => i);
@@ -44,6 +54,10 @@ export class BattleshipComponent implements AfterViewInit {
     for(const ship of this.playerShips) {
       this.placeShip(ship, PlayerType.PLAYER);
     }
+
+    for(const ship of this.aiShips) {
+      this.placeShip(ship, PlayerType.AI);
+    }
   }
 
   highlight(row: number, col: number) {
@@ -54,10 +68,6 @@ export class BattleshipComponent implements AfterViewInit {
   unhighlight(row: number, col: number) {
     this.aiSideCoordinates.nativeElement.children[row].classList.remove('highlight');
     this.aiTopCoordinates.nativeElement.children[col].classList.remove('highlight');
-  }
-
-  checkCell(row: number, col: number) {
-
   }
 
   /**
@@ -77,21 +87,20 @@ export class BattleshipComponent implements AfterViewInit {
       board = this.aiBoard;
     }
 
-    // check placement of ship and boundaries until the ship can be placed properly on the board.
+    // check placement of ship until the ship can be placed properly on the board.
     while(
       !this.checkPlacement(ship, board, row, col)
-      // && !this.checkBoundaries(ship, board, row, col)
     ) {
       // re-roll the coordinates
       row = Math.floor(Math.random() * 10);
       col = Math.floor(Math.random() * 10);
     }
 
-    for(let i = 0; i < ship.getSize(); i++) {
+    for(let i = 0; i < ship.size; i++) {
       board.nativeElement.children[0].children[row].children[col].setAttribute('ship', JSON.stringify(ship));
       board.nativeElement.children[0].children[row].children[col].classList.add('hint');
 
-      switch(ship.getOrientation()) {
+      switch(ship.orientation) {
         case Orientation.UP:
           row += 1;
           break;
@@ -109,7 +118,8 @@ export class BattleshipComponent implements AfterViewInit {
   }
 
   /**
-   * Checks if the ship is going to overlap another ship.
+   * Checks if the ship is going to overlap another ship or if the ship is going to be placed outside
+   * of the board.
    *
    * @param ship {@link Ship}: The ship being placed.
    * @param board {@link ElementRef}: The element reference to the board.
@@ -118,8 +128,8 @@ export class BattleshipComponent implements AfterViewInit {
    * @returns true if the ship is not going to overlap another ship, false if it will.
    */
   checkPlacement(ship: Ship, board: ElementRef, row: number, col: number): boolean {
-    for(let i = 0; i < ship.getSize(); i++) {
-      switch (ship.getOrientation()) {
+    for(let i = 0; i < ship.size; i++) {
+      switch (ship.orientation) {
         case Orientation.UP:
           row += 1;
           break;
@@ -134,10 +144,20 @@ export class BattleshipComponent implements AfterViewInit {
           break;
       }
 
-      const cell = board.nativeElement.children[0].children[row].children[col];
+      const targetRow = board.nativeElement.children[0].children[row];
+
+      if(!targetRow) {
+        return false;
+      }
+
+      const cell = targetRow.children[col];
+
+      if(!cell) {
+        return false;
+      }
 
       // check that the cell exists (eg. not an index out of bounds error) and if the cell has a ship in it.
-      if(cell && cell.dataset.ship) {
+      if(cell.hasAttribute('ship')) {
         return false;
       }
     }
@@ -145,34 +165,56 @@ export class BattleshipComponent implements AfterViewInit {
     return true;
   }
 
-  /**
-   * Checks if the ship is not going to fit on the board.
-   *
-   * @param ship {@link Ship}: The ship being placed.
-   * @param board {@link ElementRef}: The element reference to the board.
-   * @param row number: The row the ship is being placed on.
-   * @param col number: The column the ship is being placed on.
-   * @returns true if the ship will fit on the board, false if not.
-   */
-  // TODO: do i need this???
-  checkBoundaries(ship: Ship, board: ElementRef, row: number, col: number): boolean {
-    for(let i = 0; i < ship.getSize(); i++) {
-      switch(ship.getOrientation()) {
-        case Orientation.UP:
+  checkCell(row: number, col: number, attackingPlayerType: PlayerType) {
+    let board: ElementRef;
 
-          break;
-        case Orientation.RIGHT:
-
-          break;
-        case Orientation.DOWN:
-
-          break;
-        case Orientation.LEFT:
-
-          break;
-      }
+    if(attackingPlayerType === PlayerType.PLAYER) {
+      board = this.aiBoard;
+    } else {
+      board = this.playerBoard;
     }
 
-    return true;
+    const cell = board.nativeElement.children[0].children[row].children[col];
+
+    if(cell.hasAttribute('ship')) {
+      const ship: Ship = this.buildShip(JSON.parse(cell.getAttribute('ship')));
+      this.shipHit(ship, attackingPlayerType);
+    } else {
+      this.shipMissed(attackingPlayerType);
+    }
+  }
+
+  shipHit(ship: Ship, attackingPlayerType: PlayerType) {
+    if(!ship.isDestroyed()) {
+      ship.takeDamage();
+
+      if(attackingPlayerType === PlayerType.PLAYER) {
+        this.playerOutput.nativeElement.innerText = `You hit the enemy's ${ship.name}!`;
+        this.playerScore += 1;
+      } else {
+        this.aiOutput.nativeElement.innerText = `You hit the enemy's ${ship.name}!`;
+        this.aiScore += 1;
+      }
+    }
+  }
+
+  shipMissed(attackingPlayerType: PlayerType) {
+    if(attackingPlayerType === PlayerType.PLAYER) {
+      this.playerOutput.nativeElement.innerText = 'You missed!';
+      this.playerMisses += 1;
+    } else {
+      this.aiOutput.nativeElement.innerText = 'You missed!';
+      this.aiMisses += 1;
+    }
+  }
+
+  buildShip(ship: Ship): Ship {
+    const newShip = new Ship(ShipTypes.NULL);
+    newShip.size = ship.size;
+    newShip.health = ship.health;
+    newShip.name = ship.name;
+    newShip.orientation = ship.orientation;
+
+    return newShip;
   }
 }

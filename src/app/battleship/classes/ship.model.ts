@@ -10,10 +10,10 @@ import {ShipType} from './ship-types.model';
  * @property health number: How much health the ship has left.
  */
 export class Ship {
-  private readonly size: number;
-  private readonly name: string;
-  private readonly orientation: Orientation;
-  private health: number;
+  private mSize: number;
+  private mName: string;
+  private mHealth: number;
+  private mOrientation: Orientation;
 
   constructor(ship: ShipType) {
     this.size = ship.size;
@@ -22,20 +22,36 @@ export class Ship {
     this.orientation = Math.ceil(Math.random() * 4);
   }
 
-  public getSize() {
-    return this.size;
+  public get size() {
+    return this.mSize;
   }
 
-  public getHealth() {
-    return this.health;
+  public set size(value: number) {
+    this.mSize = value;
   }
 
-  public getName() {
-    return this.name;
+  public get name() {
+    return this.mName;
   }
 
-  public getOrientation() {
+  public set name(value: string) {
+    this.mName = value;
+  }
+
+  public get health() {
+    return this.mHealth;
+  }
+
+  public set health(value: number) {
+    this.mHealth = value;
+  }
+
+  public get orientation() {
     return this.orientation;
+  }
+
+  public set orientation(value) {
+    this.mOrientation = value;
   }
 
   public takeDamage() {

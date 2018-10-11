@@ -6,6 +6,13 @@ export interface ShipType {
 }
 
 export class ShipTypes {
+  static NULL: ShipType = {
+    health: 0,
+    size: 0,
+    name: 'NULL',
+    identifier: 0
+  };
+
   static PATROL_BOAT: ShipType = {
     health: 2,
     size: 2,

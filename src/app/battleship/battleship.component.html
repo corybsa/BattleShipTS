@@ -32,11 +32,11 @@
         *ngFor="let col of boardRows"
         (mouseenter)="highlight(row, col)"
         (mouseleave)="unhighlight(row, col)"
-        (click)="checkCell(row, col)"
+        (click)="checkCell(row, col, playerType.PLAYER)"
       ></td>
     </tr>
   </table>
-  <div id="ai-output"></div>
+  <div #aiOutput id="ai-output"></div>
 </div>
 
 <div id="space">&nbsp;</div>
@@ -74,7 +74,7 @@
       <td *ngFor="let col of boardRows"></td>
     </tr>
   </table>
-  <div id="player-output"></div>
+  <div #playerOutput id="player-output"></div>
 </div>
 <br />
 <!--<a [routerLink]="['/home']" class="bottom">Return to home page</a>-->
