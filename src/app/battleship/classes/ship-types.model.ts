@@ -30,10 +30,10 @@ export class ShipTypes {
     name: 'Battleship',
     identifier: 4
   };
-  static AIRCRAFT_CARRER: ShipType = {
+  static AIRCRAFT_CARRIER: ShipType = {
     health: 5,
     size: 5,
-    name: 'Aircraft Carrer',
+    name: 'Aircraft Carrier',
     identifier: 5
   };
 }

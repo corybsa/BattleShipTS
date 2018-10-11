@@ -14,6 +14,10 @@
   background-color: #4CAF50;
 }
 
+::ng-deep .hint {
+  background-color: #2196F3;
+}
+
 ::ng-deep #player-output {
   float: right;
 }
@@ -38,6 +42,10 @@
   position: absolute;
   top: 98px;
   left: 37px;
+}
+
+::ng-deep #ai-board td:hover {
+  background-color: #FFF9C4;
 }
 
 ::ng-deep #ai-board td,
