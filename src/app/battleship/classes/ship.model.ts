@@ -8,18 +8,29 @@ import {ShipType} from './ship-types.model';
  * @property name string: The name of the ship.
  * @property orientation {@link Orientation}: The orientation of the ship.
  * @property health number: How much health the ship has left.
+ * @property identifier number: The identifier of the ship type.
  */
 export class Ship {
   private mSize: number;
   private mName: string;
   private mHealth: number;
   private mOrientation: Orientation;
+  private mIdentifier: number;
 
   constructor(ship: ShipType) {
+    this.identifier = ship.identifier;
     this.size = ship.size;
     this.health = ship.size;
     this.name = ship.name;
     this.orientation = Math.ceil(Math.random() * 4);
+  }
+
+  public get identifier() {
+    return this.mIdentifier;
+  }
+
+  public set identifier(value) {
+    this.mIdentifier = value;
   }
 
   public get size() {

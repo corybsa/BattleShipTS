@@ -7,11 +7,11 @@
 }
 
 ::ng-deep .hit {
-  background-color: #F44336;
+  background-color: #F44336 !important;
 }
 
 ::ng-deep .miss {
-  background-color: #4CAF50;
+  background-color: #FFC107 !important;
 }
 
 ::ng-deep .hint {
