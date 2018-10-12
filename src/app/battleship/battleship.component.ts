@@ -5,6 +5,7 @@ import {PlayerType} from './classes/player-type.model';
 import {Orientation} from './classes/orientation.model';
 import {ShipPosition} from './classes/ship-position.model';
 import {AI} from './classes/ai.model';
+import {HitInfo, HitType} from './classes/hit-info.model';
 
 @Component({
   selector: 'app-battleship',
@@ -12,20 +13,20 @@ import {AI} from './classes/ai.model';
   templateUrl: './battleship.component.html'
 })
 export class BattleshipComponent implements AfterViewInit {
-  playerType = PlayerType;
-  dimensions = 10;
-  boardRows = [];
+  public dimensions = 10;
+  protected playerType = PlayerType;
+  protected boardRows = [];
 
-  playerShips: Ship[] = [];
-  playerShipPositions: ShipPosition[] = [];
-  playerScore = 0;
-  playerMisses = 0;
+  protected playerShips: Ship[] = [];
+  protected playerShipPositions: ShipPosition[] = [];
+  protected playerScore = 0;
+  protected playerMisses = 0;
 
-  ai: AI;
-  aiShips: Ship[] = [];
-  aiShipPositions: ShipPosition[] = [];
-  aiScore = 0;
-  aiMisses = 0;
+  protected ai: AI;
+  protected aiShips: Ship[] = [];
+  protected aiShipPositions: ShipPosition[] = [];
+  protected aiScore = 0;
+  protected aiMisses = 0;
 
   @ViewChild('aiBoard') aiBoard: ElementRef;
   @ViewChild('playerBoard') playerBoard: ElementRef;
@@ -35,7 +36,7 @@ export class BattleshipComponent implements AfterViewInit {
   @ViewChild('playerOutput') playerOutput: ElementRef;
 
   constructor() {
-    this.ai = new AI();
+    this.ai = new AI(this);
     this.boardRows = Array(this.dimensions).fill(0).map((x, i) => i);
 
     this.playerShips.push(
@@ -71,7 +72,7 @@ export class BattleshipComponent implements AfterViewInit {
    * @param row number: The row that is being hovered over.
    * @param col number: The column that is being hovered over.
    */
-  highlight(row: number, col: number) {
+  private highlight(row: number, col: number) {
     this.aiSideCoordinates.nativeElement.children[row].classList.add('highlight');
     this.aiTopCoordinates.nativeElement.children[col].classList.add('highlight');
   }
@@ -82,7 +83,7 @@ export class BattleshipComponent implements AfterViewInit {
    * @param row number: The row that is being hovered over.
    * @param col number: The column that is being hovered over.
    */
-  unhighlight(row: number, col: number) {
+  private unhighlight(row: number, col: number) {
     this.aiSideCoordinates.nativeElement.children[row].classList.remove('highlight');
     this.aiTopCoordinates.nativeElement.children[col].classList.remove('highlight');
   }
@@ -93,7 +94,7 @@ export class BattleshipComponent implements AfterViewInit {
    * @param ship {@link Ship}: The ship to place.
    * @param playerType {@link PlayerType}: Determines which board to place the ship on.
    */
-  placeShip(ship: Ship, playerType: PlayerType) {
+  private placeShip(ship: Ship, playerType: PlayerType) {
     let row = Math.floor(Math.random() * this.dimensions);
     let col = Math.floor(Math.random() * this.dimensions);
     let board: ElementRef;
@@ -160,7 +161,7 @@ export class BattleshipComponent implements AfterViewInit {
    * @param col number: The column the ship is being placed on.
    * @returns true if the ship is not going to overlap another ship, false if it will.
    */
-  checkPlacement(ship: Ship, board: ElementRef, row: number, col: number): boolean {
+  private checkPlacement(ship: Ship, board: ElementRef, row: number, col: number): boolean {
     for(let i = 0; i < ship.size; i++) {
       switch (ship.orientation) {
         case Orientation.UP:
@@ -208,8 +209,9 @@ export class BattleshipComponent implements AfterViewInit {
    * @param col number: The column that was targeted.
    * @param attackingPlayerType {@link PlayerType}: The type of player that is attacking.
    */
-  checkCell(row: number, col: number, attackingPlayerType: PlayerType) {
+  public checkCell(row: number, col: number, attackingPlayerType: PlayerType): HitInfo {
     let positions: ShipPosition[];
+    let info: HitInfo;
 
     if(attackingPlayerType === PlayerType.PLAYER) {
       positions = this.aiShipPositions;
@@ -225,11 +227,31 @@ export class BattleshipComponent implements AfterViewInit {
 
     if(cell) {
       this.shipHit(cell.ship, row, col, attackingPlayerType);
+
+      if(cell.ship.isDestroyed()) {
+        info = {
+          shipId: cell.ship.identifier,
+          hitType: HitType.DESTROYED
+        };
+      } else {
+        info = {
+          shipId: cell.ship.identifier,
+          hitType: HitType.HIT
+        };
+      }
     } else {
       this.shipMissed(row, col, attackingPlayerType);
+      info = {
+        shipId: null,
+        hitType: HitType.MISS
+      };
     }
 
-    this.ai.attack();
+    if(attackingPlayerType === PlayerType.PLAYER) {
+      this.ai.attack();
+    }
+
+    return info;
   }
 
   /**
@@ -240,7 +262,7 @@ export class BattleshipComponent implements AfterViewInit {
    * @param col number: The column that is being targeted.
    * @param attackingPlayerType {@PlayerType}: The type of player that is attacking.
    */
-  shipHit(ship: Ship, row: number, col: number, attackingPlayerType: PlayerType) {
+  private shipHit(ship: Ship, row: number, col: number, attackingPlayerType: PlayerType) {
     if(!ship.isDestroyed()) {
       ship.takeDamage();
 
@@ -275,7 +297,7 @@ export class BattleshipComponent implements AfterViewInit {
    * @param col number: The column that is being targeted.
    * @param attackingPlayerType {@link PlayerType}: The type of player that is attacking.
    */
-  shipMissed(row: number, col: number, attackingPlayerType: PlayerType) {
+  private shipMissed(row: number, col: number, attackingPlayerType: PlayerType) {
     if(attackingPlayerType === PlayerType.PLAYER) {
       this.playerOutput.nativeElement.innerText = 'You missed!';
       this.playerMisses += 1;

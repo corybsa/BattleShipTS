@@ -29,7 +29,7 @@ export class Ship {
     return this.mIdentifier;
   }
 
-  public set identifier(value) {
+  public set identifier(value: number) {
     this.mIdentifier = value;
   }
 
@@ -61,7 +61,7 @@ export class Ship {
     return this.mOrientation;
   }
 
-  public set orientation(value) {
+  public set orientation(value: Orientation) {
     this.mOrientation = value;
   }
 
@@ -73,16 +73,5 @@ export class Ship {
 
   public isDestroyed() {
     return this.health === 0;
-  }
-
-  public toJson(): string {
-    const payload = {
-      size: this.size,
-      health: this.health,
-      name: this.name,
-      orientation: this.orientation
-    };
-
-    return JSON.stringify(payload);
   }
 }

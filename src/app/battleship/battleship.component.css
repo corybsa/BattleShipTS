@@ -44,6 +44,7 @@
   position: absolute;
   top: 98px;
   left: 37px;
+  background-image: url('./images/water.png');
 }
 
 ::ng-deep #ai-board td:hover {
