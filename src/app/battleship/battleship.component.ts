@@ -212,11 +212,24 @@ export class BattleshipComponent implements AfterViewInit {
   public checkCell(row: number, col: number, attackingPlayerType: PlayerType): HitInfo {
     let positions: ShipPosition[];
     let info: HitInfo;
+    let board;
 
     if(attackingPlayerType === PlayerType.PLAYER) {
+      board = this.aiBoard;
       positions = this.aiShipPositions;
     } else {
+      board = this.playerBoard;
       positions = this.playerShipPositions;
+    }
+
+    const target = board.nativeElement.children[0].children[row].children[col];
+
+    if(target.classList.contains('miss') || target.classList.contains('hit')) {
+
+      return {
+        shipId: null,
+        hitType: HitType.NULL
+      };
     }
 
     const cell = positions.find(item => {

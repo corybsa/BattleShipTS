@@ -1,7 +1,8 @@
 export enum HitType {
   HIT,
   MISS,
-  DESTROYED
+  DESTROYED,
+  NULL
 }
 
 export interface HitInfo {
