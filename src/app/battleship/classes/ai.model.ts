@@ -46,31 +46,65 @@ export class AI {
 
     // If I hit a ship last turn
     if(this.memory.length > 0) {
-      // If I hit a ship only once, fire in the cardinal directions.
-      if(this.memory[0].lastAttack.hitType === HitType.HIT && this.memory[0].coordinates.length === 1) {
-        row = this.memory[0].coordinates[0].row;
-        col = this.memory[0].coordinates[0].col;
-        orientation = this.rotate(this.memory[0].orientation);
+      const memory = this.memory;
+      const firstMemory = memory[0];
 
-        const coords: Coordinate = this.getNextCoordinates(row, col, orientation);
-        row = coords.row;
-        col = coords.col;
+      // If I hit a certain ship previously, and haven't destroyed it but hit a different ship, go back to the first ship.
+      if(memory.length > 1) {
+        row = firstMemory.coordinates[0].row;
+        col = firstMemory.coordinates[0].col;
+        firstMemory.orientation = this.rotate(firstMemory.orientation);
+        orientation = firstMemory.orientation;
+
+      // If I hit a ship only once, fire in the cardinal directions.
+      } else if(firstMemory.lastAttack.hitType === HitType.HIT && firstMemory.coordinates.length === 1) {
+        row = firstMemory.coordinates[0].row;
+        col = firstMemory.coordinates[0].col;
+        firstMemory.orientation = this.rotate(firstMemory.orientation);
+        orientation = firstMemory.orientation;
 
       // If I hit a ship in the last turn and I've hit it more than once, keep firing in that direction.
-      } else if(this.memory[0].lastAttack.hitType === HitType.HIT && this.memory[0].coordinates.length > 1) {
-        row = this.memory[0].coordinates[this.memory[0].coordinates.length - 1].row;
-        col = this.memory[0].coordinates[this.memory[0].coordinates.length - 1].col;
-        orientation = this.memory[0].orientation;
-
-        const coords: Coordinate = this.getNextCoordinates(row, col, orientation);
-        row = coords.row;
-        col = coords.col;
+      } else if(firstMemory.lastAttack.hitType === HitType.HIT && firstMemory.coordinates.length > 1) {
+        row = firstMemory.coordinates[firstMemory.coordinates.length - 1].row;
+        col = firstMemory.coordinates[firstMemory.coordinates.length - 1].col;
+        orientation = firstMemory.orientation;
 
       // If I am firing in a certain direction and I miss return to the original location and fire the opposite direction.
-      } else if(this.memory[0].lastAttack.hitType === HitType.MISS && this.memory[0].coordinates.length > 1) {
-        row = this.memory[0].coordinates[0].row;
-        col = this.memory[0].coordinates[0].col;
-        orientation = this.reverseOrientation(this.memory[0].orientation);
+      } else if(firstMemory.lastAttack.hitType === HitType.MISS && firstMemory.coordinates.length > 1) {
+        row = firstMemory.coordinates[0].row;
+        col = firstMemory.coordinates[0].col;
+        firstMemory.orientation = this.reverseOrientation(firstMemory.orientation);
+        orientation = firstMemory.orientation;
+
+      // If I hit a ship previously, rotated last turn and missed, keep rotating until I hit a ship.
+      } else if(firstMemory.lastAttack.hitType === HitType.MISS && firstMemory.coordinates.length === 1) {
+        row = firstMemory.coordinates[0].row;
+        col = firstMemory.coordinates[0].col;
+        firstMemory.orientation = this.rotate(firstMemory.orientation);
+        orientation = firstMemory.orientation;
+      }
+
+      const coords: Coordinate = this.getNextCoordinates(row, col, orientation);
+      row = coords.row;
+      col = coords.col;
+    }
+
+    while(!this.checkCoordinates(row, col)) {
+      orientation = this.reverseOrientation(orientation);
+
+      switch(orientation) {
+        case Orientation.UP:
+          row -= 2;
+          break;
+        case Orientation.RIGHT:
+          col += 2;
+          break;
+        case Orientation.DOWN:
+          row += 2;
+          break;
+        case Orientation.LEFT:
+          col -= 2;
+          break;
       }
     }
 
@@ -78,15 +112,6 @@ export class AI {
 
     if(attackInfo.hitType === HitType.NULL) {
       return this.attack();
-    }
-
-    if(attackInfo.hitType !== HitType.MISS) {
-      this.memory.push({
-        orientation: orientation,
-        lastAttack: attackInfo,
-        shipId: attackInfo.shipId,
-        coordinates: []
-      });
     }
 
     // check if the ai hit a ship and store the coordinates into memory if it did.
@@ -100,7 +125,25 @@ export class AI {
 
     // If I hit a ship, remember the location.
     if(attackInfo.hitType === HitType.HIT) {
-      // TODO: Find the ship in memory and append the coordinates.
+      const memory = this.memory.find(item => item.shipId === attackInfo.shipId);
+
+      if(memory) {
+        memory.coordinates.push({ row: row, col: col });
+      } else {
+        this.memory.push({
+          orientation: orientation,
+          lastAttack: attackInfo,
+          shipId: attackInfo.shipId,
+          coordinates: [{
+            row: row,
+            col: col
+          }]
+        });
+      }
+    }
+
+    if(attackInfo.hitType === HitType.MISS) {
+      this.memory[0].lastAttack.hitType = attackInfo.hitType;
     }
   }
 
@@ -150,13 +193,17 @@ export class AI {
   private getNextCoordinates(row: number, col: number, orientation: Orientation): Coordinate {
     switch(orientation) {
       case Orientation.UP:
-        return { row: row += 1, col: col };
+        return { row: row -= 1, col: col };
       case Orientation.RIGHT:
         return { row: row, col: col += 1 };
       case Orientation.DOWN:
-        return { row: row -= 1, col: col };
+        return { row: row += 1, col: col };
       case Orientation.LEFT:
         return { row: row, col: col -= 1 };
     }
+  }
+
+  private checkCoordinates(row: number, col: number) {
+    return !((row < 0 || row > 9) || (col < 0 || col > 9));
   }
 }
