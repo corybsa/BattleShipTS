@@ -1,0 +1,112 @@
+::ng-deep .center {
+  text-align: center;
+}
+
+::ng-deep .highlight {
+  background-color: #FFF9C4;
+}
+
+::ng-deep .hit {
+  background-color: #F44336 !important;
+}
+
+::ng-deep .miss {
+  background-color: #FFC107 !important;
+}
+
+::ng-deep .hint {
+  background-color: #2196F3;
+}
+
+::ng-deep #player-output {
+  display: block;
+  width: 100%;
+  text-align: right;
+}
+
+::ng-deep #player, ::ng-deep #ai {
+  float: left;
+  position: relative;
+}
+
+::ng-deep #space {
+  width: 50px;
+  float: left;
+}
+
+::ng-deep #ai-board {
+  cursor: crosshair !important;
+}
+
+::ng-deep #ai-board,
+::ng-deep #player-board {
+  border-collapse: collapse;
+  position: absolute;
+  top: 98px;
+  left: 37px;
+  /*background-image: url('./images/water.png');*/
+}
+
+::ng-deep #ai-board td:hover {
+  background-color: #FFF9C4;
+}
+
+::ng-deep #ai-board td,
+::ng-deep #player-board td {
+  border: 1px solid hsl(0, 0%, 60%);
+  height: 35px;
+  width: 35px;
+  padding: 0;
+  margin: 0;
+}
+
+::ng-deep #ai-side-coordinates,
+::ng-deep #player-side-coordinates {
+  list-style-type: none;
+  padding: 0;
+  margin: 37px 0 0 0;
+  display: inline-block;
+}
+
+::ng-deep #ai-side-coordinates li,
+::ng-deep #player-side-coordinates li {
+  list-style-type: none;
+  height: 29px;
+  width: 35px;
+  text-align: center;
+  border-left: 1px solid hsl(0, 0%, 70%);
+  border-right: 1px solid hsl(0, 0%, 70%);
+  border-bottom: 1px solid hsl(0, 0%, 70%);
+  padding-top: 6px;
+}
+
+::ng-deep #ai-side-coordinates li:first-of-type,
+::ng-deep #player-side-coordinates li:first-of-type {
+  border-top: 1px solid hsl(0, 0%, 70%);
+}
+
+::ng-deep #ai-top-coordinates,
+::ng-deep #player-top-coordinates {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+  vertical-align: top;
+}
+
+::ng-deep #ai-top-coordinates li,
+::ng-deep #player-top-coordinates li {
+  display: inline-block;
+  height: 29px;
+  width: 35px;
+  text-align: center;
+  border-top: 1px solid hsl(0, 0%, 70%);
+  border-bottom: 1px solid hsl(0, 0%, 70%);
+  border-right: 1px solid hsl(0, 0%, 70%);
+  padding-top: 6px;
+}
+
+::ng-deep #ai-top-coordinates li:first-of-type,
+::ng-deep #player-top-coordinates li:first-of-type {
+  border-left: 1px solid hsl(0, 0%, 70%);
+}
