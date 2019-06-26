@@ -8,11 +8,11 @@ import {AI} from './classes/ai.model';
 import {HitInfo, HitType} from './classes/hit-info.model';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'app-battleship',
+  styleUrls: ['./battleship.component.css'],
+  templateUrl: './battleship.component.html'
 })
-export class AppComponent implements AfterViewInit {
+export class BattleshipComponent implements AfterViewInit {
   public dimensions = 10;
   protected playerType = PlayerType;
   protected boardRows = [];
@@ -108,13 +108,9 @@ export class AppComponent implements AfterViewInit {
     }
 
     // check placement of ship until the ship can be placed properly on the board.
-<<<<<<< HEAD
-    while(!this.checkPlacement(ship, board, row, col)) {
-=======
     while(
       !this.checkPlacement(ship, board, row, col)
-      ) {
->>>>>>> 695f6282a4c9864d4d49da7e5620049438aa0720
+    ) {
       // re-roll the coordinates
       row = Math.floor(Math.random() * 10);
       col = Math.floor(Math.random() * 10);
@@ -209,7 +205,7 @@ export class AppComponent implements AfterViewInit {
    * Checks if the cell contains a ship or not. If it does then damage the ship. It it doesn't then
    * tell the player they missed.
    *
-   * @param row number: The row that was targeted.
+   * @param row  number: The row that was targeted.
    * @param col number: The column that was targeted.
    * @param attackingPlayerType {@link PlayerType}: The type of player that is attacking.
    */
@@ -229,6 +225,7 @@ export class AppComponent implements AfterViewInit {
     const target = board.nativeElement.children[0].children[row].children[col];
 
     if(target.classList.contains('miss') || target.classList.contains('hit')) {
+
       return {
         shipId: null,
         hitType: HitType.NULL
@@ -268,36 +265,6 @@ export class AppComponent implements AfterViewInit {
     }
 
     return info;
-  }
-
-  /**
-   * Checks if cell has been targeted before.
-   *
-   * @param row number: The row that is being targeted.
-   * @param col number: The column that is being targeted.
-   * @param attackingPlayerType {@link PlayerType}: The type of player that is attacking.
-   * @returns <code>true</code> if the cell hasn't been targeted. <code>false</code> if the cell has been targeted.
-   */
-  public getCellInfo(row: number, col: number, attackingPlayerType: PlayerType): boolean {
-    let board;
-
-    if(attackingPlayerType === PlayerType.PLAYER) {
-      board = this.aiBoard;
-    } else {
-      board = this.playerBoard;
-    }
-
-    const target = board.nativeElement.children[0].children[row].children[col];
-
-    if(target === undefined) {
-      return false;
-    }
-
-    if(target.classList.contains('miss') || target.classList.contains('hit')) {
-      return false;
-    }
-
-    return true;
   }
 
   /**

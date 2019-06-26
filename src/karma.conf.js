@@ -8,7 +8,10 @@ module.exports = function (config) {
     plugins: [
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
+<<<<<<< HEAD
       require('karma-phantomjs-launcher'),
+=======
+>>>>>>> 695f6282a4c9864d4d49da7e5620049438aa0720
       require('karma-jasmine-html-reporter'),
       require('karma-coverage-istanbul-reporter'),
       require('@angular-devkit/build-angular/plugins/karma')
@@ -26,7 +29,14 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
+<<<<<<< HEAD
     browsers: ['PhantomJS'],
     singleRun: false
   });
 };
+=======
+    browsers: ['Chrome'],
+    singleRun: false
+  });
+};
+>>>>>>> 695f6282a4c9864d4d49da7e5620049438aa0720
