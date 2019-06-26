@@ -108,9 +108,7 @@ export class AppComponent implements AfterViewInit {
     }
 
     // check placement of ship until the ship can be placed properly on the board.
-    while(
-      !this.checkPlacement(ship, board, row, col)
-      ) {
+    while(!this.checkPlacement(ship, board, row, col)) {
       // re-roll the coordinates
       row = Math.floor(Math.random() * 10);
       col = Math.floor(Math.random() * 10);
