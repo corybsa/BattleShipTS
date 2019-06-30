@@ -1,5 +1,5 @@
 import {Orientation} from './orientation.model';
-import {ShipType} from './ship-types.model';
+import {ShipProperties} from './ship-types.model';
 
 /**
  * Represents a ship.
@@ -17,7 +17,7 @@ export class Ship {
   private mOrientation: Orientation;
   private mIdentifier: number;
 
-  constructor(ship: ShipType) {
+  constructor(ship: ShipProperties) {
     this.identifier = ship.identifier;
     this.size = ship.size;
     this.health = ship.size;
