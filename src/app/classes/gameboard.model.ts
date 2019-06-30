@@ -1,5 +1,4 @@
 import {Ship} from './ship.model';
-import {PlayerType} from './player-type.model';
 import {ShipTypes} from './ship-types.model';
 import {ShipPosition} from './ship-position.model';
 import {Orientation} from './orientation.model';
@@ -10,19 +9,23 @@ interface Board {
     col: number,
     row: number,
     hitInfo: HitInfo
+    ship: Ship
   }[];
 }
 
 export class Gameboard {
   private readonly dimensions: number;
-  private board: Board;
-  private playerType: PlayerType;
-  private ships: Ship[];
-  private shipPositions: ShipPosition[];
+  private readonly ships: Ship[];
+  private readonly shipPositions: ShipPosition[];
+  public board: Board;
 
-  constructor(dimens: number, playerType: PlayerType) {
+  constructor(dimens: number) {
     this.dimensions = dimens;
-    this.playerType = playerType;
+    this.ships = [];
+    this.shipPositions = [];
+    this.board = {
+      cells: []
+    };
 
     this.ships.push(
       new Ship(ShipTypes.PATROL_BOAT),
@@ -32,58 +35,18 @@ export class Gameboard {
       new Ship(ShipTypes.AIRCRAFT_CARRIER)
     );
 
-    this.placeShips();
+    this.initBoard();
   }
 
   private initBoard() {
-    this.board = {
-      cells: []
-    };
-
     for(let row = 0; row < this.dimensions; row++) {
       for(let col = 0; col < this.dimensions; col++) {
         this.board.cells.push({
           row: row,
           col: col,
-          hitInfo: {shipId: ShipTypes.NULL.identifier, hitType: HitType.NULL}
+          hitInfo: {shipId: ShipTypes.NULL.identifier, hitType: HitType.NULL},
+          ship: null
         });
-      }
-    }
-  }
-
-  /**
-   * Places the ship on the board.
-   */
-  private placeShips() {
-    for(const ship of this.ships) {
-      let row = Math.floor(Math.random() * this.dimensions);
-      let col = Math.floor(Math.random() * this.dimensions);
-
-      while (!this.checkPlacement(ship, row, col)) {
-        row = Math.floor(Math.random() * this.dimensions);
-        col = Math.floor(Math.random() * this.dimensions);
-      }
-
-      for(let i = 0; i < ship.size; i++) {
-        this.shipPositions
-          .find(item => item.ship.identifier === ship.identifier)
-          .coordinates
-          .push({ row, col });
-
-        switch(ship.orientation) {
-          case Orientation.UP:
-            row += 1;
-            break;
-          case Orientation.RIGHT:
-            col += 1;
-            break;
-          case Orientation.DOWN:
-            row -= 1;
-            break;
-          case Orientation.LEFT:
-            col -= 1;
-            break;
-        }
       }
     }
   }
@@ -220,6 +183,82 @@ export class Gameboard {
       if(cell.row === row && cell.col === col) {
         cell.hitInfo.hitType = HitType.MISS;
         return;
+      }
+    }
+  }
+
+  /**
+   * Places the ships on the board.
+   */
+  public placeShips() {
+    for(const ship of this.ships) {
+      let row = Math.floor(Math.random() * this.dimensions);
+      let col = Math.floor(Math.random() * this.dimensions);
+
+      while (!this.checkPlacement(ship, row, col)) {
+        row = Math.floor(Math.random() * this.dimensions);
+        col = Math.floor(Math.random() * this.dimensions);
+      }
+
+      for(let i = 0; i < ship.size; i++) {
+        const cell = this.board.cells.find(item => item.row === row && item.col === col);
+
+        if(!cell) {
+          continue;
+        }
+
+        cell.ship = ship;
+        cell.hitInfo = { hitType: HitType.NULL, shipId: ship.identifier };
+
+        switch(ship.orientation) {
+          case Orientation.UP:
+            row += 1;
+            break;
+          case Orientation.RIGHT:
+            col += 1;
+            break;
+          case Orientation.DOWN:
+            row -= 1;
+            break;
+          case Orientation.LEFT:
+            col -= 1;
+            break;
+        }
+      }
+    }
+  }
+
+  // TODO: this is a debug method! Remove before release!!!!!!!
+  public clearBoard() {
+    this.board.cells = [];
+    this.initBoard();
+  }
+
+  // TODO: this is a debug method! Remove before release!!!!!!!
+  public placeShip(ship: Ship, row: number, col: number) {
+    for(let i = 0; i < ship.size; i++) {
+      const cell = this.board.cells.find(item => item.row === row && item.col === col);
+
+      if(!cell) {
+        continue;
+      }
+
+      cell.ship = ship;
+      cell.hitInfo = { hitType: HitType.NULL, shipId: ship.identifier };
+
+      switch(ship.orientation) {
+        case Orientation.UP:
+          row -= 1;
+          break;
+        case Orientation.RIGHT:
+          col += 1;
+          break;
+        case Orientation.DOWN:
+          row += 1;
+          break;
+        case Orientation.LEFT:
+          col -= 1;
+          break;
       }
     }
   }
