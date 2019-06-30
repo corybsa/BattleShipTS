@@ -25,7 +25,7 @@ export class AI {
     this.board = board;
   }
 
-  public attack() {
+  /*public attack() {
     let row: number;
     let col: number;
     let orientation: Orientation = Orientation.UP;
@@ -217,14 +217,14 @@ export class AI {
         }
       }
     }
-  }
+  }*/
 
   /**
    * Rotates orientation of attack.
    *
    * @param orientation {@link Orientation}: The current orientation.
    */
-  private rotateOrientation(orientation): Orientation {
+  /*private rotateOrientation(orientation): Orientation {
     switch(orientation) {
       case Orientation.UP:
         return Orientation.RIGHT;
@@ -235,14 +235,14 @@ export class AI {
       case Orientation.LEFT:
         return Orientation.UP;
     }
-  }
+  }*/
 
   /**
    * Reverses orientation of attack.
    *
    * @param orientation {@link Orientation}: The current orientation.
    */
-  private reverseOrientation(orientation): Orientation {
+  /*private reverseOrientation(orientation): Orientation {
     switch(orientation) {
       case Orientation.UP:
         return Orientation.DOWN;
@@ -253,7 +253,7 @@ export class AI {
       case Orientation.LEFT:
         return Orientation.RIGHT;
     }
-  }
+  }*/
 
   /**
    * Finds new coordinates based on orientation, row and column.
@@ -262,7 +262,7 @@ export class AI {
    * @param col number: The current column.
    * @param orientation {@link Orientation}: The orientation to fire in.
    */
-  private getNextCoordinates(row: number, col: number, orientation: Orientation): Coordinate {
+  /*private getNextCoordinates(row: number, col: number, orientation: Orientation): Coordinate {
     switch(orientation) {
       case Orientation.UP:
         return { row: row -= 1, col: col };
@@ -273,7 +273,7 @@ export class AI {
       case Orientation.LEFT:
         return { row: row, col: col -= 1 };
     }
-  }
+  }*/
 
   /**
    * Checks if the target is within the bounds of the board.
@@ -281,10 +281,10 @@ export class AI {
    * @param row number: The current row.
    * @param col number: The current column.
    */
-  private checkCoordinates(row: number, col: number) {
+  /*private checkCoordinates(row: number, col: number) {
     const max = this.board.dimensions - 1;
     return ((row >= 0 && row <= max) && (col >= 0 && col <= max));
-  }
+  }*/
 
   /**
    * Checks if there are any valid cells around the current cell.
@@ -293,7 +293,7 @@ export class AI {
    * @param col number: The current column.
    * @returns the coordinates of the valid cell. <code>null</code> if there are no valid cells
    */
-  private checkSurroundingCells(row: number, col: number): Coordinate {
+  /*private checkSurroundingCells(row: number, col: number): Coordinate {
     // check up
     row -= 1;
     if(this.board.getCellInfo(row, col, PlayerType.AI)) {
@@ -323,7 +323,7 @@ export class AI {
     col += 1;
 
     return null;
-  }
+  }*/
 
   /**
    * Sorts the coordinates
@@ -332,7 +332,7 @@ export class AI {
    * @param orientation {@link Orientation}: The orientation of attack.
    * @returns The sorted coordinates.
    */
-  private sortCoordinates(coordinates: Coordinate[], orientation: Orientation): Coordinate[] {
+  /*private sortCoordinates(coordinates: Coordinate[], orientation: Orientation): Coordinate[] {
     coordinates.sort((a, b) => {
       switch(orientation) {
         case Orientation.UP:
@@ -379,5 +379,5 @@ export class AI {
     });
 
     return coordinates;
-  }
+  }*/
 }
