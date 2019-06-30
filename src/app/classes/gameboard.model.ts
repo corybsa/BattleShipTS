@@ -137,6 +137,12 @@ export class Gameboard {
     return true;
   }
 
+  /**
+   * Checks if the cell contains a ship or not. If it does then damage the ship. It it doesn't then
+   * tell the player they missed.
+   * @param row number: The row that was targeted.
+   * @param col number: The column that was targeted.
+   */
   private checkCell(row: number, col: number): HitInfo {
     let info: HitInfo;
     const boardCell = this.board.cells.find(item => {
@@ -163,7 +169,6 @@ export class Gameboard {
     });
 
     if(position) {
-      // TODO: implement this method.
       this.shipHit(position.ship, row, col);
 
       if(position.ship.isDestroyed()) {
@@ -178,25 +183,45 @@ export class Gameboard {
         };
       }
     } else {
-      // TODO: implement this method.
-      this.shipMissed(position.ship, row, col);
+      this.shipMissed(row, col);
       info = {
         shipId: ShipTypes.NULL.identifier,
         hitType: HitType.MISS
       };
     }
 
-    // TODO: this is where the ai is allowed to attack. Need to figure out the best way to do that.
-
     return info;
   }
 
+  /**
+   * The attack was a hit. Tell the ship to take damage, and mark the cell on the board as a hit.
+   * @param ship {@link Ship}: The ship that is being targeted.
+   * @param row number: The row that was targeted.
+   * @param col number: The column that was targeted.
+   */
   private shipHit(ship: Ship, row: number, col: number) {
+    ship.takeDamage();
 
+    for(const cell of this.board.cells) {
+      if(cell.row === row && cell.col === col) {
+        cell.hitInfo.hitType = HitType.HIT;
+        return;
+      }
+    }
   }
 
-  private shipMissed(ship: Ship, row: number, col: number) {
-
+  /**
+   * The attack was a miss. Mark the cell on the board as a miss.
+   * @param row number: The row that was targeted.
+   * @param col number: The column that was targeted.
+   */
+  private shipMissed(row: number, col: number) {
+    for(const cell of this.board.cells) {
+      if(cell.row === row && cell.col === col) {
+        cell.hitInfo.hitType = HitType.MISS;
+        return;
+      }
+    }
   }
 
   /**
@@ -204,5 +229,29 @@ export class Gameboard {
    */
   public getShipPositions() {
     return this.shipPositions;
+  }
+
+  /**
+   * Checks if the cell has been targeted before.
+   * @param row number: The row that is being targeted.
+   * @param col number: The col that is being targeted.
+   * @returns <code>true</code> if the cell hasn't been targeted. <code>false</code> if the cell has been targeted.
+   */
+  public getCellInfo(row: number, col: number): boolean {
+    const target = this.board.cells.find(cell => {
+      if(cell.row === row && cell.col === col) {
+        return true;
+      }
+    });
+
+    if(target === undefined) {
+      return false;
+    }
+
+    if(target.hitInfo.hitType === HitType.MISS || target.hitInfo.hitType === HitType.HIT) {
+      return false;
+    }
+
+    return true;
   }
 }
