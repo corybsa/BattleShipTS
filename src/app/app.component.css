@@ -1,3 +1,4 @@
+/*
 ::ng-deep .center {
   text-align: center;
 }
@@ -44,7 +45,7 @@
   position: absolute;
   top: 98px;
   left: 37px;
-  /*background-image: url('./images/water.png');*/
+  !*background-image: url('./images/water.png');*!
 }
 
 ::ng-deep #ai-board td:hover {
@@ -110,3 +111,4 @@
 ::ng-deep #player-top-coordinates li:first-of-type {
   border-left: 1px solid hsl(0, 0%, 70%);
 }
+*/
