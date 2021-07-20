@@ -1,0 +1,11 @@
+td.hit {
+    background-color: red;
+}
+
+td.miss {
+    background-color: blue;
+}
+
+td.info {
+    background-color: green;
+}

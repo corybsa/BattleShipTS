@@ -1,0 +1,36 @@
+<div style="width: 50%; display: inline-block; position: relative; height: 100vh;">
+    <div style="text-align: center; width: 632px; margin-left: auto; margin-right: 30px;">Player</div>
+    <table style="border-collapse: collapse; position: absolute; top: 20px; right: 30px;">
+        <tr *ngFor="let i of playerBoard.getRows(); let row = index">
+            <td
+                *ngFor="let j of playerBoard.getColumns(); let col = index"
+                style="border: 1px solid black; width: 60px; height: 60px;"
+                [ngClass]="{
+                    hit: playerBoard.getSlot(row, col).status === slotStatus.HIT,
+                    miss: playerBoard.getSlot(row, col).status === slotStatus.MISS,
+                    info: playerBoard.getSlot(row, col).status === slotStatus.INFO
+                }"
+            ></td>
+        </tr>
+    </table>
+    <p style="position: absolute; top: 660px; left: 300px;">{{ playerBoard.message }}</p>
+</div>
+
+<div style="width: 50%; display: inline-block; position: relative; height: 100vh;">
+    <div style="text-align: center; width: 632px; margin-left: 30px; margin-right: auto;">AI</div>
+    <table style="border-collapse: collapse; position: absolute; top: 20px; left: 30px; cursor: crosshair;">
+        <tr *ngFor="let i of aiBoard.getRows(); let row = index">
+            <td
+                *ngFor="let j of aiBoard.getColumns(); let col = index"
+                style="border: 1px solid black; width: 60px; height: 60px;"
+                [ngClass]="{
+                    hit: aiBoard.getSlot(row, col).status === slotStatus.HIT,
+                    miss: aiBoard.getSlot(row, col).status === slotStatus.MISS,
+                    info: aiBoard.getSlot(row, col).status === slotStatus.INFO
+                }"
+                (click)="slotClicked(row, col)"
+            ></td>
+        </tr>
+    </table>
+    <p style="position: absolute; top: 660px; left: 30px;">{{ aiBoard.message }}</p>
+</div>
