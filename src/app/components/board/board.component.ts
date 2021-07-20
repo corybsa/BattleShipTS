@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AI } from 'src/app/models/ai/ai';
 import { Board } from 'src/app/models/board/board';
 import { BoardSlotStatus } from 'src/app/models/board/board-slot-status.enum';
 import { ShipDirection } from 'src/app/models/ship/ship-direction.enum';
@@ -12,6 +13,7 @@ import { ShipType } from 'src/app/models/ship/ship-type';
 export class BoardComponent implements OnInit {
   playerBoard = new Board(10, 10);
   aiBoard = new Board(10, 10);
+  ai = new AI(this.playerBoard);
   slotStatus = BoardSlotStatus;
 
   constructor() {
@@ -32,12 +34,13 @@ export class BoardComponent implements OnInit {
     this.aiBoard.placeShip(ShipType.Cruiser, ShipDirection.DOWN, 0, 0);
     this.aiBoard.placeShip(ShipType.Battleship, ShipDirection.LEFT, 0, 0);
     this.aiBoard.placeShip(ShipType.Carrier, ShipDirection.UP, 0, 0);
+    
   }
 
   slotClicked(row: number, col: number) {
-    this.aiBoard.slotClick(row, col);
-
-    // let the ai target the player
-    this.playerBoard.slotClick(Math.floor(Math.random() * 10), Math.floor(Math.random() * 10));
+    if(this.aiBoard.slotClick(row, col)) {
+      // let the ai target the player
+      this.ai.attack();
+    }
   }
 }

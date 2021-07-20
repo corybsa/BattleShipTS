@@ -29,15 +29,13 @@ export class Board {
         return this.slots[(this.rows * row) + col];
     }
 
-    public slotClick(row: number, col: number) {
+    public slotClick(row: number, col: number): boolean {
         const slot = this.slots[(this.rows * row) + col];
 
         if(slot.status === BoardSlotStatus.HIT || slot.status === BoardSlotStatus.MISS) {
             this.message = 'You\'ve already targeted this space, pick another one!';
-            return;
+            return false;
         }
-        
-        console.log(slot.ship);
 
         if(slot.ship && slot.ship.health > 0) {
             slot.status = BoardSlotStatus.HIT;
@@ -51,6 +49,8 @@ export class Board {
             slot.status = BoardSlotStatus.MISS;
             this.message = 'Sploooosh!';
         }
+
+        return true;
     }
 
     public placeShip(ship: ShipType, direction?: ShipDirection, row?: number, col?: number) {
