@@ -2,6 +2,7 @@ import { ShipDirection } from "../ship/ship-direction.enum";
 import { ShipType } from "../ship/ship-type";
 import { BoardSlot } from "./board-slot";
 import { BoardSlotStatus } from "./board-slot-status.enum";
+import { HitType } from "./hit-type";
 
 export class Board {
     public slots: BoardSlot[];
@@ -29,12 +30,14 @@ export class Board {
         return this.slots[(this.rows * row) + col];
     }
 
-    public slotClick(row: number, col: number): boolean {
+    // TODO: return something other than boolean
+    // probably return the slot's status
+    public slotClick(row: number, col: number): HitType {
         const slot = this.slots[(this.rows * row) + col];
 
         if(slot.status === BoardSlotStatus.HIT || slot.status === BoardSlotStatus.MISS) {
             this.message = 'You\'ve already targeted this space, pick another one!';
-            return false;
+            return HitType.ERROR;
         }
 
         if(slot.ship && slot.ship.health > 0) {
@@ -48,9 +51,10 @@ export class Board {
         } else {
             slot.status = BoardSlotStatus.MISS;
             this.message = 'Sploooosh!';
+            return HitType.MISS;
         }
 
-        return true;
+        return HitType.HIT;
     }
 
     public placeShip(ship: ShipType, direction?: ShipDirection, row?: number, col?: number) {

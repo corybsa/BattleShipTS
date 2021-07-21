@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AI } from 'src/app/models/ai/ai';
 import { Board } from 'src/app/models/board/board';
 import { BoardSlotStatus } from 'src/app/models/board/board-slot-status.enum';
+import { HitType } from 'src/app/models/board/hit-type';
 import { ShipDirection } from 'src/app/models/ship/ship-direction.enum';
 import { ShipType } from 'src/app/models/ship/ship-type';
 
@@ -38,7 +39,7 @@ export class BoardComponent implements OnInit {
   }
 
   slotClicked(row: number, col: number) {
-    if(this.aiBoard.slotClick(row, col)) {
+    if(this.aiBoard.slotClick(row, col) !== HitType.ERROR) {
       // let the ai target the player
       this.ai.attack();
     }
