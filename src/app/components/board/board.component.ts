@@ -39,6 +39,10 @@ export class BoardComponent implements OnInit {
   }
 
   slotClicked(row: number, col: number) {
+    if(this.aiBoard.hasWon() || this.playerBoard.hasWon()) {
+      return;
+    }
+
     if(this.aiBoard.slotClick(row, col) !== HitType.ERROR) {
       // let the ai target the player
       this.ai.attack();

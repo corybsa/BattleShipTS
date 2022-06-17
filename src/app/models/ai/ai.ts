@@ -70,6 +70,7 @@ export class AI {
 
                 switch(result) {
                     case HitType.HIT:
+                        this.hitCount++;
                         this.lastHit = Helper.copy(this.nextHit);
 
                         break;

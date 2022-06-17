@@ -13,7 +13,8 @@
             ></td>
         </tr>
     </table>
-    <p style="position: absolute; top: 660px; left: 300px;">{{ playerBoard.message }}</p>
+    <p style="position: absolute; top: 660px; left: 0;">{{ playerBoard.points }}/{{ playerBoard.totalPoints }} {{ playerBoard.message }}</p>
+    <p style="position: absolute; top: 660px; left: 300px;" *ngIf="playerBoard.hasWon()">The AI won :(</p>
 </div>
 
 <div style="width: 50%; display: inline-block; position: relative; height: 100vh;">
@@ -32,5 +33,6 @@
             ></td>
         </tr>
     </table>
-    <p style="position: absolute; top: 660px; left: 30px;">{{ aiBoard.message }}</p>
+    <p style="position: absolute; top: 660px; left: 30px;">{{ aiBoard.points }}/{{ aiBoard.totalPoints }} {{ aiBoard.message }}</p>
+    <p style="position: absolute; top: 660px; left: 300px;" *ngIf="aiBoard.hasWon()">A winner is you!</p>
 </div>

@@ -8,6 +8,8 @@ export class Board {
     public slots: BoardSlot[];
     public message: string;
     public showHints = false;
+    public totalPoints: number = 0;
+    public points: number = 0;
 
     constructor(
         public rows: number,
@@ -30,6 +32,10 @@ export class Board {
         return this.slots[(this.rows * row) + col];
     }
 
+    public hasWon(): boolean {
+        return this.points === this.totalPoints;
+    }
+
     public slotClick(row: number, col: number): HitType {
         const slot = this.slots[(this.rows * row) + col];
 
@@ -45,6 +51,7 @@ export class Board {
             
             if(slot.ship.health === 0) {
                 this.message = `${slot.ship.name} destroyed!`;
+                this.points++;
                 return HitType.DESTROY;
             }
         } else {
@@ -71,6 +78,7 @@ export class Board {
         
         [row, col] = this.checkCollision(row, col, ship, direction);
         this.placeShipInSlot(row, col, ship, direction);
+        this.totalPoints++;
     }
 
     private checkCollision(row: number, col: number, ship: ShipType, direction: ShipDirection): number[] {
