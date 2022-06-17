@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Helper } from './models/utils/helper';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'battleship';
+  helper = Helper;
 }

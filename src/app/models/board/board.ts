@@ -30,8 +30,6 @@ export class Board {
         return this.slots[(this.rows * row) + col];
     }
 
-    // TODO: return something other than boolean
-    // probably return the slot's status
     public slotClick(row: number, col: number): HitType {
         const slot = this.slots[(this.rows * row) + col];
 
