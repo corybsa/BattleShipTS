@@ -18,15 +18,15 @@ export class Board {
             .map(() => new BoardSlot());
     }
 
-    public getRows() {
+    public getRows(): number[] {
         return Array(this.rows);
     }
 
-    public getColumns() {
+    public getColumns(): number[] {
         return Array(this.columns);
     }
 
-    public getSlot(row: number, col: number) {
+    public getSlot(row: number, col: number): BoardSlot {
         return this.slots[(this.rows * row) + col];
     }
 
@@ -41,7 +41,7 @@ export class Board {
         if(slot.ship && slot.ship.health > 0) {
             slot.status = BoardSlotStatus.HIT;
             slot.ship.health--;
-            this.message = `${slot.ship.name} was hit!`;
+            this.message = 'A ship was hit!';
             
             if(slot.ship.health === 0) {
                 this.message = `${slot.ship.name} destroyed!`;
@@ -56,7 +56,7 @@ export class Board {
         return HitType.HIT;
     }
 
-    public placeShip(ship: ShipType, direction?: ShipDirection, row?: number, col?: number) {
+    public placeShip(ship: ShipType, direction?: ShipDirection, row?: number, col?: number): void {
         if(direction === undefined) {
             direction = Math.floor(Math.random() * 4);
         }
@@ -156,7 +156,7 @@ export class Board {
         }
     }
 
-    private placeShipInSlot(row: number, col: number, ship: ShipType, direction: ShipDirection) {
+    private placeShipInSlot(row: number, col: number, ship: ShipType, direction: ShipDirection): void {
         let index: number;
 
         for(let i = 0; i < ship.length; i++) {
