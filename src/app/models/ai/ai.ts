@@ -1,10 +1,14 @@
 import { Board } from "../board/board";
 import { HitType } from "../board/hit-type";
 import { ShipDirection } from "../ship/ship-direction.enum";
+import { Helper } from "../utils/helper";
 
 export class AI {
     private playerBoard: Board;
     private lastHit: { row: number, col: number, dir: ShipDirection };
+    private nextHit: { row: number, col: number, dir: ShipDirection };
+    private firstHit: { row: number, col: number };
+    private hitCount: number;
 
     constructor(board: Board) {
         this.playerBoard = board;
@@ -16,6 +20,7 @@ export class AI {
             let result: HitType;
             let row: number;
             let col: number;
+            this.firstHit = null;
 
             do {
                 row = Math.floor(Math.random() * this.playerBoard.rows);
@@ -24,7 +29,9 @@ export class AI {
             } while(result === HitType.ERROR);
 
             if(result === HitType.HIT) {
+                this.hitCount = 1;
                 this.lastHit = { row, col, dir: null };
+                this.firstHit = { row, col };
             }
         } else {
             if(this.lastHit.dir === null) {
@@ -32,52 +39,59 @@ export class AI {
             }
             
             let result: HitType;
-            let row: number;
-            let col: number;
-            let dir: ShipDirection;
+
+            if(!this.nextHit) {
+                this.nextHit = Helper.copy(this.lastHit);
+            }
 
             do {
-                row = this.lastHit.row;
-                col = this.lastHit.col;
-                dir = this.checkBoundaries(row, col, this.lastHit.dir);
+                this.nextHit.dir = this.checkBoundaries(this.nextHit.row, this.nextHit.col, this.nextHit.dir);
 
-                switch(dir) {
+                switch(this.nextHit.dir) {
                     case ShipDirection.UP:
-                        row--;
+                        this.nextHit.row--;
 
                         break;
                     case ShipDirection.RIGHT:
-                        col++;
+                        this.nextHit.col++;
 
                         break;
                     case ShipDirection.DOWN:
-                        row++;
+                        this.nextHit.row++;
 
                         break;
                     case ShipDirection.LEFT:
-                        col--;
+                        this.nextHit.col--;
 
                         break;
                 }
                 
-                result = this.playerBoard.slotClick(row, col);
+                result = this.playerBoard.slotClick(this.nextHit.row, this.nextHit.col);
 
                 switch(result) {
                     case HitType.HIT:
-                        this.lastHit.row = row;
-                        this.lastHit.col = col;
-                        this.lastHit.dir = dir;
+                        this.lastHit = Helper.copy(this.nextHit);
 
                         break;
                     case HitType.DESTROY:
+                        this.firstHit = null;
                         this.lastHit = null;
-                        // TODO: handle case when ai hits multiple ships without destroying the first ship
+                        this.nextHit = null;
 
                         break;
                     case HitType.MISS:
                     case HitType.ERROR:
-                        // rotate directions
-                        this.lastHit.dir = (this.lastHit.dir + 1) % 4;
+                        if(this.firstHit && this.hitCount > 1) {
+                            this.nextHit.row = this.firstHit.row;
+                            this.nextHit.col = this.firstHit.col;
+                            // reverse direction
+                            this.nextHit.dir = (this.nextHit.dir + 2) % 4;
+                        } else {
+                            this.nextHit.row = this.lastHit.row;
+                            this.nextHit.col = this.lastHit.col;
+                            // rotate directions
+                            this.nextHit.dir = (this.nextHit.dir + 1) % 4;
+                        }
 
                         break;
                 }
