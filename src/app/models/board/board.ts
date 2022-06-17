@@ -45,6 +45,7 @@ export class Board {
             
             if(slot.ship.health === 0) {
                 this.message = `${slot.ship.name} destroyed!`;
+                return HitType.DESTROY;
             }
         } else {
             slot.status = BoardSlotStatus.MISS;
