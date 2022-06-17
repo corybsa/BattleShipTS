@@ -22,8 +22,8 @@
     "@angular/platform-browser-dynamic": "~13.3.11",
     "@angular/router": "~13.3.11",
     "@angular/service-worker": "~13.3.11",
-    "@ngrx/store": "^12.3.0",
-    "@ngrx/store-devtools": "^12.3.0",
+    "@ngrx/store": "^13.2.0",
+    "@ngrx/store-devtools": "^13.2.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"
