@@ -72,7 +72,6 @@ export class AI {
                     case HitType.DESTROY:
                         this.lastHit = null;
                         // TODO: handle case when ai hits multiple ships without destroying the first ship
-                        // TODO: ai doesn't know that it destroyed a ship and loops infinitely
 
                         break;
                     case HitType.MISS:
